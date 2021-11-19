@@ -6,9 +6,13 @@
 // 两根指针一前一后，后面的指针的数先跟pivot比较，大于等于则后指针前移，扩展大于pivot的序列，小于则把arr[hi]直接付给arr[lo]，
 // 然后跳到前指针进行类似的操作，直到两个指针重合，结束一趟扫描，返回重合指针位置mid；
 // 递归左右序列，单个数字自然有序
+// 
+// 改进：当hi-lo比较小的时候，可以用插入排序代替快排
+
 
 #include <vector>
 #include <cassert>
+
 using namespace std;
 
 class QuickSort {
