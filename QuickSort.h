@@ -1,13 +1,15 @@
-#pragma once
-// ����˼�룺ѡȡpivot��ͨ��һ�˱���ʹpivot��λ������ߵ��������������ұߵ�����������С��
-// ���������������еݹ�����˲�����ʹ����Ԫ�ؾ�λ���������
+﻿#pragma once
+// 基本思想：选取pivot，通过一趟遍历使pivot就位，即左边的数都不比它大，右边的数都不比它小，
+// 对左右两个子序列递归的做此操作，使所有元素就位，排序完成
 // 
-// ���裺���ѡȡpivot����������һ��λ�ã�һ����������pivot�� �൱�ڿճ�arr[lo]��
-// ����ָ��һǰһ�󣬺����ָ������ȸ�pivot�Ƚϣ����ڵ������ָ��ǰ�ƣ���չ����pivot�����У�С�����arr[hi]ֱ�Ӹ���arr[lo]��
-// Ȼ������ǰָ��������ƵĲ�����ֱ������ָ���غϣ�����һ��ɨ�裬�����غ�ָ��λ��mid��
-// �ݹ��������У�����������Ȼ����
+// 步骤：随机选取pivot并交换至第一个位置，一个变量保存pivot， 相当于空出arr[lo]，
+// 两根指针一前一后，后面的指针的数先跟pivot比较，大于等于则后指针前移，扩展大于等于pivot的序列，小于则把arr[hi]直接付给arr[lo]，
+// 然后跳到前指针进行类似的操作，直到两个指针重合，结束一趟扫描，返回重合指针位置mid；
+// 递归左右序列，单个数字自然有序
 // 
-// �Ľ�����hi-lo�Ƚ�С��ʱ�򣬿����ò�������������
+// 改进：当hi-lo比较小的时候，可以用插入排序代替快排
+
+// 时间复杂度平均O(NlgN)，最坏O(N²), 空间O(lgN)(递归栈)  不稳定
 
 
 #include <vector>
@@ -44,7 +46,7 @@ public:
 				--hi;
 			}
 		}
-		assert(lo == hi); // assert ��������ʱ���ԣ�static_assert���ڱ���ʱ��̬����
+		assert(lo == hi); // assert 用于运行时断言，static_assert用于编译时静态断言
 		arr[lo] = pivot;
 		return lo;
 	}

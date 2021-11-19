@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include "quicksort.h"
-
+#include "mergesort.h"
 using namespace std;
 
 int main()
@@ -11,8 +11,8 @@ int main()
 	//cout << __LINE__ << endl;
 	//cout << __TIME__ << endl;
 	//cout << __DATE__ << endl;
-	QuickSort a;
-	vector<int> arr{ 7,1,5,1,3,3 };
-	a.quickSort(arr);
+	MergeSort a;
+	vector<int> arr{ 3,1,2 };
+	a.mergeSort(arr);
 	for_each(arr.begin(), arr.end(), [](int n) { cout << n << " "; });
 }
