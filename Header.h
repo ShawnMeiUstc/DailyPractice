@@ -44,7 +44,7 @@ public:
 				auto pairBeforeSort1 = split(cur, step);
 				auto pairBeforeSort2 = split(pairBeforeSort1.second, step);
 				cur = pairBeforeSort2.second;
-				auto pairAfterSort = merge(pairBeforeSort1.first, pairBeforeSort2.first);
+				auto pairAfterSort = merge2Lists(pairBeforeSort1.first, pairBeforeSort2.first);
 				lastSorted->next = pairAfterSort.first;
 				lastSorted = pairAfterSort.second;
 			}
@@ -72,7 +72,7 @@ public:
 	}
 
 	// 已排序首元素、末元素
-	pair<ListNode*, ListNode*> merge(ListNode* l1, ListNode* l2)
+	pair<ListNode*, ListNode*> merge2Lists(ListNode* l1, ListNode* l2)
 	{
 		ListNode* dumbNode = new ListNode(-1), * cur = dumbNode;
 		while (l1 && l2)

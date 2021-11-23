@@ -11,8 +11,10 @@ int main()
 	//cout << __LINE__ << endl;
 	//cout << __TIME__ << endl;
 	//cout << __DATE__ << endl;
-	MergeSort a;
+	MergeSort M;
 	vector<int> arr{ 3,1,2 };
-	a.mergeSort(arr);
+	//M.mergeSort(arr);
+	QuickSort Q;
+	Q.quickSort(arr);
 	for_each(arr.begin(), arr.end(), [](int n) { cout << n << " "; });
 }

@@ -12,6 +12,11 @@
 // 时间复杂度平均O(NlgN)，最坏O(N²), 空间O(lgN)(递归栈)  不稳定
 
 
+// 另一种partition方法，适用于链表，先交换两个值，arr[lo]作为轴点，然后用i，j两个指标指示lo+1位置，之后比较arr[j]与轴点的大小，移动指针，让i左边的数小于等于轴点，i j
+// 之间的数大于轴点，直到j移出边界；  具体的说，若arr[lo] < arr[j], i不动，++j；若 arr[j] <= arr[lo], 则swap(arr[i], arr[j])，++i, ++j;
+// 最后轴点归位到i-1位置
+#include "ListNode.h"
+
 #include <vector>
 #include <cassert>
 
@@ -51,12 +56,70 @@ public:
 		return lo;
 	}
 
+	int partition1(vector<int>& arr, int lo, int hi) {
+		swap(arr[lo], arr[rand() % (hi - lo + 1) + lo]);
+		int i = lo + 1;
+		for (int j = lo + 1; j <= hi; ++j) {
+			if (arr[j] <= arr[lo]) {
+				swap(arr[i++], arr[j]);
+			}
+		}
+		swap(arr[lo], arr[i-1]);
+		return i - 1;
+	}
+
 	void sort(vector<int>& arr, int lo, int hi) {
 		if (hi <= lo) {
 			return;
 		}
-		int mid = partition(arr, lo, hi);
+		int mid = partition1(arr, lo, hi);
 		sort(arr, lo, mid);
 		sort(arr, mid + 1, hi);
+	}
+};
+
+
+class QuickSortList {
+public:
+	ListNode* quickSort(ListNode* head) {
+		if (head == nullptr || head->next == nullptr) {
+			return head;
+		}
+		ListNode* tail = head;
+		while (tail->next) {
+			tail = tail->next;
+		}
+		quickSortAug(head, tail);
+		return head;
+	}
+
+	void quickSortAug(ListNode* head, ListNode* tail) {
+		if (head == nullptr || tail == nullptr || head == tail) {
+			return;
+		}
+		ListNode* mid = partition(head, tail);
+		quickSortAug(head, mid);
+		quickSortAug(mid->next, tail);
+	}
+
+	ListNode* partition(ListNode* head, ListNode* tail) {
+		ListNode* iNode = head->next, * jNode = head->next, *iPre = head;
+		while (jNode != tail) {
+			if (jNode->val < head->val) {
+				swap(jNode->val, iNode->val); // 不能交换数据的时候，保存iPre，iNext，jPre，jNext，断链组合
+				iPre = iNode;
+				iNode = iNode->next;
+			}
+			jNode = jNode->next;
+		}
+		// 这里jNode == tail，还没有移到出界位置，特殊处理一下
+		if (jNode->val < head->val) {
+			swap(jNode->val, iNode->val);
+			iPre = iNode;
+			iNode = iNode->next;
+		}
+
+		swap(head->val, iPre->val);
+		return iPre;
 	}
 };

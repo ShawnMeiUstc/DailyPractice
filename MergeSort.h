@@ -7,7 +7,7 @@
 
 // O(NlgN) O(N)
 
-
+#include "ListNode.h"
 #include <vector>
 
 using namespace std;
@@ -54,17 +54,9 @@ public:
 	}
 };
 
-
-
-struct ListNode {
-	int val;
-	ListNode* next;
-	ListNode() : val(0), next(nullptr) {}
-	ListNode(int x) : val(x), next(nullptr) {}
-	ListNode(int x, ListNode* next) : val(x), next(next) {}
-};
-
-class MergeSortLinkedList {
+// 递归的归并
+// 从中点分两段，传参数时注意传递头尾
+class MergeSortLinkedListRec {
 public:
 	ListNode* sortList(ListNode* head) {
 		if (head == nullptr || head->next == nullptr) {
@@ -85,7 +77,7 @@ public:
 		mid->next = nullptr;
 		ListNode* sorted = sortList(head, mid);
 		ListNode* sorted1 = sortList(head1, tail);
-		return merge(sorted, sorted1);
+		return merge2Lists(sorted, sorted1);
 	}
 
 	ListNode* findMid(ListNode* head, ListNode* tail) {
@@ -97,7 +89,7 @@ public:
 		return slow;
 	}
 
-	ListNode* merge(ListNode* l1, ListNode* l2) {
+	ListNode* merge2Lists(ListNode* l1, ListNode* l2) {
 		ListNode* dumb = new ListNode(-1), * cur = dumb;
 		while (l1 && l2) {
 			if (l1->val < l2->val) {
@@ -110,12 +102,90 @@ public:
 			}
 			cur = cur->next;
 		}
-		if (l1) {
-			cur->next = l1;
-		}
-		if (l2) {
-			cur->next = l2;
-		}
+		cur->next = l1 ? l1 : l2;
 		return dumb->next;
+	}
+};
+
+// 迭代的归并
+// 总体思想：定义一个步长step，从1开始成倍递增，直到超过链表总长的一半；
+// 每次长为step的短链表两两合并，最后一次合并的时候两个短链表包含了所有元素，使总体有序
+// 步骤：求链表总长；虚拟头结点返回用；按步长分割链表，返回其头和下一个链表的头；
+// 两个短合并之后的末元素，用于连接链表；
+
+class MergeSortLinkedListIter {
+public:
+	ListNode* sortList(ListNode* head)
+	{
+		if (!head || !head->next)
+		{
+			return head;
+		}
+		ListNode* cur = head;
+		int len = 0;
+		while (cur)
+		{
+			++len;
+			cur = cur->next;
+		}
+		ListNode* dumbNode = new ListNode(-1, head);
+		for (int step = 1; step < len; step <<= 1)
+		{
+			ListNode* cur = dumbNode->next, * lastSorted = dumbNode;
+
+			while (cur)
+			{
+				auto pairBeforeSort1 = split(cur, step);
+				auto pairBeforeSort2 = split(pairBeforeSort1.second, step);
+				cur = pairBeforeSort2.second;
+				auto pairAfterSort = merge2Lists(pairBeforeSort1.first, pairBeforeSort2.first);
+				lastSorted->next = pairAfterSort.first;
+				lastSorted = pairAfterSort.second;
+			}
+		}
+		return dumbNode->next;
+	}
+
+	// 找step个未排序元素，并断链
+	// 返回未排序首元素和 末元素的下一个元素
+	pair<ListNode*, ListNode*> split(ListNode* beg, int step)
+	{
+		ListNode* resFir = beg, * resSec = nullptr;
+		while (--step && beg)
+		{
+			beg = beg->next;
+		}
+		if (beg)
+		{
+			resSec = beg->next;
+			beg->next = nullptr;
+		}
+		return { resFir, resSec };
+	}
+
+	// 已排序首元素、末元素
+	pair<ListNode*, ListNode*> merge2Lists(ListNode* l1, ListNode* l2)
+	{
+		ListNode* dumbNode = new ListNode(-1), * cur = dumbNode;
+		while (l1 && l2)
+		{
+			if (l1->val < l2->val)
+			{
+				cur->next = l1;
+				l1 = l1->next;
+			}
+			else
+			{
+				cur->next = l2;
+				l2 = l2->next;
+			}
+			cur = cur->next;
+		}
+		cur->next = l1 ? l1 : l2;
+		while (cur->next)
+		{
+			cur = cur->next;
+		}
+		return { dumbNode->next, cur };
 	}
 };
