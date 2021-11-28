@@ -1,4 +1,3 @@
-#pragma once
 // 基本思想：对给定的序列，从中间位置分成左右等长的两个部分，然后对两个子序列递归调用mergesort（这个过程由
 // 程序栈自动完成，直到所有子序列长度为1自然有序，我们不用关心），之后再对上面两个处理的子序列merge一下就可以了。
 // 
@@ -7,10 +6,9 @@
 
 // O(NlgN) O(N)
 
-#include "ListNode.h"
-#include <vector>
 
-using namespace std;
+#pragma once
+#include "stdafx.h"
 
 class MergeSort {
 public:
@@ -70,7 +68,7 @@ public:
 	}
 
 	ListNode* sortList(ListNode* head, ListNode* tail) {
-		if (head == tail) {
+		if (head == nullptr || tail == nullptr || head == tail) {
 			return head;
 		}
 		ListNode* mid = findMid(head, tail), * head1 = mid->next;

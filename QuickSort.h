@@ -1,5 +1,4 @@
-﻿#pragma once
-// 基本思想：选取pivot，通过一趟遍历使pivot就位，即左边的数都不比它大，右边的数都不比它小，
+﻿// 基本思想：选取pivot，通过一趟遍历使pivot就位，即左边的数都不比它大，右边的数都不比它小，
 // 对左右两个子序列递归的做此操作，使所有元素就位，排序完成
 // 
 // 步骤：随机选取pivot并交换至第一个位置，一个变量保存pivot， 相当于空出arr[lo]，
@@ -12,15 +11,13 @@
 // 时间复杂度平均O(NlgN)，最坏O(N²), 空间O(lgN)(递归栈)  不稳定
 
 
-// 另一种partition方法，适用于链表，先交换两个值，arr[lo]作为轴点，然后用i，j两个指标指示lo+1位置，之后比较arr[j]与轴点的大小，移动指针，让i左边的数小于等于轴点，i j
+// 另一种partition方法，适用于链表，先交换两个值，arr[lo]作为轴点，然后用i，j两个指标指示lo+1位置，
+// 之后比较arr[j]与轴点的大小，移动指针，让i左边的数小于等于轴点，i j
 // 之间的数大于轴点，直到j移出边界；  具体的说，若arr[lo] < arr[j], i不动，++j；若 arr[j] <= arr[lo], 则swap(arr[i], arr[j])，++i, ++j;
 // 最后轴点归位到i-1位置
-#include "ListNode.h"
 
-#include <vector>
-#include <cassert>
-
-using namespace std;
+#pragma once
+#include "stdafx.h"
 
 class QuickSort {
 public:

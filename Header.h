@@ -19,7 +19,7 @@ struct ListNode {
 	ListNode(int x, ListNode* next) : val(x), next(next) {}
 
 };
-class Solution {
+class HeapSort {
 public:
 	ListNode* sortList(ListNode* head)
 	{
